@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prayog | Secure Login</title>
+    <title>Prayog | Secure Access</title>
     <style>
       * {
         margin: 0;
@@ -27,7 +27,7 @@
         border-radius: 20px;
         box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
         width: 100%;
-        max-width: 400px;
+        max-width: 420px;
         padding: 40px;
         text-align: center;
         backdrop-filter: blur(10px);
@@ -100,7 +100,23 @@
         color: #29c7ac;
         margin-bottom: 10px;
       }
+
+      .toggle-link {
+        color: #29c7ac;
+        cursor: pointer;
+        font-weight: 500;
+      }
     </style>
+    <script>
+      function toggleForm() {
+        const loginForm = document.getElementById("login-form");
+        const signupForm = document.getElementById("signup-form");
+        loginForm.style.display =
+          loginForm.style.display === "none" ? "block" : "none";
+        signupForm.style.display =
+          signupForm.style.display === "none" ? "block" : "none";
+      }
+    </script>
   </head>
   <body>
     <div class="login-container">
@@ -108,7 +124,8 @@
       <h1>Welcome to Prayog</h1>
       <p>AI-Driven Organ Viability Dashboard</p>
 
-      <form>
+      <!-- Login Form -->
+      <form id="login-form">
         <label for="hospital-id">Hospital ID</label>
         <input
           type="text"
@@ -134,6 +151,67 @@
         </select>
 
         <button type="submit">Login</button>
+        <p class="note">
+          Don't have an account?
+          <span class="toggle-link" onclick="toggleForm()">Sign up</span>
+        </p>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="signup-form" style="display: none">
+        <label for="new-name">Full Name</label>
+        <input
+          type="text"
+          id="new-name"
+          placeholder="Enter your full name"
+          required
+        />
+
+        <label for="new-hospital-id">Hospital ID</label>
+        <input
+          type="text"
+          id="new-hospital-id"
+          placeholder="Create your Hospital ID"
+          required
+        />
+
+        <label for="new-email">Email</label>
+        <input
+          type="email"
+          id="new-email"
+          placeholder="Enter your official email"
+          required
+        />
+
+        <label for="new-password">Password</label>
+        <input
+          type="password"
+          id="new-password"
+          placeholder="Create password"
+          required
+        />
+
+        <label for="confirm-password">Confirm Password</label>
+        <input
+          type="password"
+          id="confirm-password"
+          placeholder="Confirm password"
+          required
+        />
+
+        <label for="new-role">Select Role</label>
+        <select id="new-role" required>
+          <option value="" disabled selected>Choose Role</option>
+          <option value="doctor">Doctor</option>
+          <option value="technician">Technician</option>
+          <option value="transport">Transport Staff</option>
+        </select>
+
+        <button type="submit">Sign Up</button>
+        <p class="note">
+          Already have an account?
+          <span class="toggle-link" onclick="toggleForm()">Login</span>
+        </p>
       </form>
 
       <p class="note">Secure access via hospital intranet only.</p>
