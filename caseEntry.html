@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🫀 Heart Monitoring Dashboard - Prayog</title>
+
+    <!-- Remix Icon CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: radial-gradient(circle at top left, #0d0d0d, #000);
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-attachment: fixed;
+      }
+
+      .container {
+        background: rgba(30, 30, 30, 0.5);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 40px;
+        width: 420px;
+        text-align: center;
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+        color: #b7f0f0;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: #aaa;
+        margin-bottom: 25px;
+      }
+
+      .btn {
+        display: block;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        padding: 12px;
+        width: 100%;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 15px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .existing-cases {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 10px;
+        margin-top: 10px;
+      }
+
+      .case-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        transition: 0.3s;
+        color: #fff;
+      }
+
+      .case-item:hover {
+        background: rgba(0, 255, 255, 0.1);
+      }
+
+      .case-item i {
+        font-size: 1.3rem;
+        color: #f2f2f2;
+      }
+
+      footer {
+        margin-top: 20px;
+        font-size: 0.8rem;
+        color: #555;
+      }
+
+      /* ───────── Transparent Modal ───────── */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 10;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(15px);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: rgba(20, 20, 20, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        width: 70%;
+        max-width: 700px;
+        padding: 30px;
+        color: #fff;
+        text-align: center;
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.15);
+      }
+
+      .modal-content iframe {
+        width: 100%;
+        height: 400px;
+        border: none;
+        border-radius: 12px;
+        margin-top: 15px;
+      }
+
+      .close-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #fff;
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      .close-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>🫀 Heart Case Selection</h1>
+      <p>Select or create a new heart monitoring case.</p>
+
+      <button class="btn" onclick="toggleNewEntry()">+ New Heart Entry</button>
+
+      <div id="newEntry" class="form-section" style="display: none">
+        <label for="caseID">Case ID</label>
+        <input
+          type="text"
+          id="caseID"
+          placeholder="Enter Case ID (e.g., Heart_2025_07)"
+        />
+        <button class="btn" onclick="createCase()">Create Case</button>
+      </div>
+
+      <div class="form-section">
+        <label>Existing Heart Cases</label>
+        <div id="existingCases" class="existing-cases">
+          <div
+            class="case-item"
+            onclick="openCase('Heart in Transit #2025_07')"
+          >
+            <i class="ri-heart-pulse-line"></i> Heart in Transit #2025_07
+          </div>
+        </div>
+      </div>
+
+      <footer>© 2025 Prayog | Heart Monitoring Interface</footer>
+    </div>
+
+    <!-- Transparent Modal -->
+    <div id="caseModal" class="modal">
+      <div class="modal-content">
+        <h2>🩺 Live Heart Monitoring</h2>
+        <p>AI-powered live detection and viability analysis.</p>
+
+        <iframe src="https://vinuta-transplant-monitor.streamlit.app"></iframe>
+
+        <button class="close-btn" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+
+    <script>
+      function toggleNewEntry() {
+        const section = document.getElementById("newEntry");
+        section.style.display =
+          section.style.display === "none" ? "block" : "none";
+      }
+
+      function createCase() {
+        const caseID = document.getElementById("caseID").value.trim();
+        const existingCases = document.getElementById("existingCases");
+
+        if (caseID) {
+          const newDiv = document.createElement("div");
+          newDiv.className = "case-item";
+          newDiv.innerHTML = `<i class="ri-heart-pulse-line"></i> Heart Case #${caseID}`;
+          newDiv.onclick = () => openCase(`Heart Case #${caseID}`);
+
+          existingCases.appendChild(newDiv);
+          document.getElementById("caseID").value = "";
+          alert(`✅ New heart case added: Heart Case #${caseID}`);
+        } else {
+          alert("⚠️ Please enter a case ID.");
+        }
+      }
+
+      function openCase(name) {
+        const modal = document.getElementById("caseModal");
+        modal.style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("caseModal").style.display = "none";
+      }
+    </script>
+  </body>
+</html>
