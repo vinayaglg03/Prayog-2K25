@@ -1,6 +1,4 @@
 """
-Virtual Mouse using Hand Gestures
----------------------------------
 Gestures:
 👍  Thumbs Up         → Scroll Up
 👎  Thumbs Down       → Scroll Down
